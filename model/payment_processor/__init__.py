@@ -1,4 +1,5 @@
 from abc import ABC, abstractmethod
+from model.discounts import DiscountedPaymentDecorator
 
 
 class AbstractPaymentProcessor(ABC):
@@ -33,6 +34,6 @@ class PaymentProcessor(AbstractPaymentProcessor):
         payment_method = payment.get("payment_method")
         if payment_method in self.payment_strategies:
             strategy = self.payment_strategies[payment["payment_method"]]
-            strategy.process_payment(payment)
+            DiscountedPaymentDecorator(strategy).process_payment(payment)
         else:
             print(f"Error: Payment method '{payment_method}' not found.")

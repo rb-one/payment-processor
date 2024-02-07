@@ -2,17 +2,18 @@
     {
         "payment_method": "credit",
         "amount": 50.0,
+        "discount_type": "total_amount",
         "discount": -5.0
     },
     {
         "payment_method": "debit",
         "amount": 25.0,
-        "discount": -5.0
+        "discount_type": "percentage",
+        "discount": 50
     },
     {
         "payment_method": "cash",
-        "amount": 30.0,
-        "discount": -10.0
+        "amount": 30.0
     },
     {
         "payment_method": "pse",

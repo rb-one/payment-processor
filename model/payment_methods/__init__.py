@@ -15,6 +15,7 @@ class ObservablePaymentMethod(PaymentMethod):
     Payment method that allows to add a list of observers
     to execute actions
     """
+
     def __init__(self):
         self._observers = []
 
