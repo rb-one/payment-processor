@@ -28,10 +28,11 @@ class PaymentProcessor(AbstractPaymentProcessor):
         if payment_method in self.payment_strategies:
             del self.payment_strategies[payment_method]
 
-    def process_payment(self, payment_method, amount):
+    def process_payment(self, payment):
         """Process a payment using the specified payment method"""
+        payment_method = payment.get("payment_method")
         if payment_method in self.payment_strategies:
-            strategy = self.payment_strategies[payment_method]
-            strategy.process_payment(amount)
+            strategy = self.payment_strategies[payment["payment_method"]]
+            strategy.process_payment(payment)
         else:
             print(f"Error: Payment method '{payment_method}' not found.")

@@ -5,6 +5,7 @@ from model.payment_methods.debit import DebitPayment
 from model.payment_methods.pse import PsePayment
 from model.payment_processor import PaymentProcessor
 from model.file_reader import PaymentFileReader
+from model.executors.logger import PaymentLogger
 
 
 def main():
@@ -14,12 +15,20 @@ def main():
 
 
 def create_processor() -> PaymentProcessor:
-    payment_processor = PaymentProcessor()
-    payment_processor.add_payment_method("cash", CashPayment())
-    payment_processor.add_payment_method("credit", CreditPayment())
-    payment_processor.add_payment_method("debit", DebitPayment())
-    payment_processor.add_payment_method("pse", PsePayment())
-    return payment_processor
+    processor = PaymentProcessor()
+
+    # Payment methods
+    cash = CashPayment().add_observer(PaymentLogger)
+    credit = CreditPayment().add_observer(PaymentLogger)
+    debit = DebitPayment().add_observer(PaymentLogger)
+    pse = PsePayment().add_observer(PaymentLogger)
+
+    processor.add_payment_method("cash", cash)
+    processor.add_payment_method("credit", credit)
+    processor.add_payment_method("debit", debit)
+    processor.add_payment_method("pse", pse)
+
+    return processor
 
 
 def read_file(file_path: str) -> Mapping:
@@ -29,7 +38,7 @@ def read_file(file_path: str) -> Mapping:
 
 def start_process(processor: PaymentProcessor, payments: Mapping) -> None:
     for payment in payments:
-        processor.process_payment(**payment)
+        processor.process_payment(payment)
 
 
 if __name__ == "__main__":

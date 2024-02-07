@@ -1,9 +1,9 @@
-from model.payment_methods import PaymentMethod
-from model.logger import PaymentLogger
+from model.payment_methods import ObservablePaymentMethod
+
+# from model.logger import PaymentLogger
 
 
-class CashPayment(PaymentMethod):
-    def process_payment(self, amount):
+class CashPayment(ObservablePaymentMethod):
+    def process_payment(self, payment):
         """implementes abstract method"""
-        logger = PaymentLogger()
-        logger.log_payment_info(type(self).__name__, amount)
+        self.notify_observers(payment)
