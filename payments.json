@@ -1,7 +1,7 @@
 [
     {
         "payment_method": "cash",
-        "amount": 50.0,
+        "amount": 100.0,
         "discounts": [
             {
                 "discount_type": "total_amount",
@@ -14,7 +14,7 @@
         ]
     },
     {
-        "payment_method": "cash",
+        "payment_method": "credit",
         "amount": 50.0,
         "discounts": [
             {

@@ -23,4 +23,7 @@ class Payment(BasePayment):
         self.to_charge = to_charge
 
     def apply_charge(self):
+        if not self.to_charge:
+            self.to_charge = self.amount
+
         return self

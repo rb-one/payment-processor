@@ -15,11 +15,12 @@ class PercentageDiscount(DiscountDecorator):
 
     def apply_charge(self) -> Mapping:
         self.payment = self.payment.apply_charge()
-        discount_amount = self.payment.amount * (self.discount / 100)
+        percentage = self.discount / 100
 
         if self.payment.to_charge:
-            self.payment.to_charge -= discount_amount
+            self.payment.to_charge -= self.payment.to_charge * percentage
         else:
+            discount_amount = self.payment.amount * percentage
             self.payment.to_charge = self.payment.amount - discount_amount
 
         return self.payment
