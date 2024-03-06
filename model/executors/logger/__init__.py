@@ -12,5 +12,9 @@ from model.executors import ExecutorObserver
 class PaymentLogger(ExecutorObserver):
     def update(self, payment):
         """Register payment info"""
+        if charge := payment.get("to_charge"):
+            payment.update({"charged": charge})
+        else:
+            payment.update({"charged": payment["amount"]})
+
         logger.info(payment)
-        # logger.info(f"Payment processed - Method: {payment_method}, Amount: ${amount}")

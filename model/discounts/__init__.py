@@ -1,48 +1,55 @@
 from abc import ABC, abstractmethod
+from collections.abc import Mapping
 
-
-class Discount(ABC):
+class DiscountDecorator(ABC):
     @abstractmethod
-    def apply_discount(self, amount):
-        """
-        Abstract method to apply the discount.
-        """
+    def __init__(self, payment, discount):
+        pass
+
+    @abstractmethod
+    def apply(self) -> Mapping:
+        pass
 
 
-class PercentageDiscount(Discount):
-    def apply_discount(self, payment):
-        discount_amount = payment["amount"] * (payment["discount"] / 100)
-        charge = payment["amount"] - discount_amount
-        return {**payment, "to_charge": charge}
+class PercentageDiscount(DiscountDecorator):
+    def __init__(self, payment, discount):
+        self.payment = payment
+        self.discount = discount
+
+    def apply(self) -> Mapping:
+        discount_amount = self.payment["amount"] * (self.discount / 100)
+
+        if to_charge := self.payment.get("to_charge"):
+            to_charge -= discount_amount
+        else:
+            to_charge = self.payment["amount"] - discount_amount
+
+        return {**self.payment, "to_charge": to_charge}
 
 
-class TotalAmountDiscount(Discount):
-    def apply_discount(self, payment):
-        charge = payment["amount"] - abs(payment["discount"])
-        return {**payment, "to_charge": charge}
+class TotalAmountDiscount(DiscountDecorator):
 
+    def __init__(self, payment, discount):
+        self.payment = payment
+        self.discount = discount
 
-class NoDiscount(Discount):
-    def apply_discount(self, payment):
-        return {**payment, "to_charge": payment["amount"]}
+    def apply(self) -> Mapping:
+
+        if to_charge := self.payment.get("to_charge"):
+            to_charge -= abs(self.discount)
+        else:
+            to_charge = self.payment["amount"] - abs(self.discount)
+
+        return {**self.payment, "to_charge": to_charge}
 
 
 class DiscountPaymentFactory:
-    def create_discount(self, payment):
-        if payment.get("discount_type") == "total_amount":
-            discount = TotalAmountDiscount()
-        elif payment.get("discount_type") == "percentage":
-            discount = PercentageDiscount()
-        else:
-            discount = NoDiscount()
-        return discount
+    def create_discount(self, discount, payment):
 
+        if discount.get("discount_type") == "total_amount":
+            payment = TotalAmountDiscount(payment, discount["value"])
+        elif discount.get("discount_type") == "percentage":
+            payment = PercentageDiscount(payment, discount["value"])
 
-class DiscountedPaymentDecorator:
-    def __init__(self, payment_strategy):
-        self._payment_strategy = payment_strategy
+        return payment
 
-    def process_payment(self, payment):
-        self._discount = DiscountPaymentFactory().create_discount(payment)
-        updated_payment = self._discount.apply_discount(payment)
-        self._payment_strategy.process_payment(updated_payment)

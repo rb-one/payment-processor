@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from model.discounts import DiscountedPaymentDecorator
+from model.discounts import DiscountPaymentFactory
 
 
 class AbstractPaymentProcessor(ABC):
@@ -12,7 +12,7 @@ class AbstractPaymentProcessor(ABC):
         pass
 
     @abstractmethod
-    def process_payment(self, payment_method, amount):
+    def process_payment(self, payment):
         pass
 
 
@@ -31,9 +31,17 @@ class PaymentProcessor(AbstractPaymentProcessor):
 
     def process_payment(self, payment):
         """Process a payment using the specified payment method"""
-        payment_method = payment.get("payment_method")
+        payment_method = payment["payment_method"]
+        discount_factory = DiscountPaymentFactory()
+
+        for discount in payment.get("discounts", []):
+            _discount = discount_factory.create_discount(discount, payment)
+            payment = _discount.apply()
+
         if payment_method in self.payment_strategies:
             strategy = self.payment_strategies[payment["payment_method"]]
-            DiscountedPaymentDecorator(strategy).process_payment(payment)
+            strategy.process_payment(payment)
+
         else:
             print(f"Error: Payment method '{payment_method}' not found.")
+

@@ -2,25 +2,33 @@
     {
         "payment_method": "credit",
         "amount": 50.0,
-        "discount_type": "total_amount",
-        "discount": -5.0
-    },
-    {
-        "payment_method": "debit",
-        "amount": 25.0,
-        "discount_type": "percentage",
-        "discount": 50
+        "discounts": [
+            {
+                "discount_type": "total_amount",
+                "value": -5.0
+            },
+            {
+                "discount_type": "percentage",
+                "value": 50
+            }
+        ]
     },
     {
         "payment_method": "cash",
-        "amount": 30.0
+        "amount": 50.0,
+        "discounts": [
+            {
+                "discount_type": "total_amount",
+                "value": -5.0
+            },
+            {
+                "discount_type": "percentage",
+                "value": 30
+            }
+        ]
     },
     {
-        "payment_method": "pse",
-        "amount": 100.0
-    },
-    {
-        "payment_method": "nequi",
-        "amount": 150.0
+        "payment_method": "cash",
+        "amount": 50.0
     }
 ]
