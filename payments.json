@@ -1,6 +1,6 @@
 [
     {
-        "payment_method": "credit",
+        "payment_method": "cash",
         "amount": 50.0,
         "discounts": [
             {

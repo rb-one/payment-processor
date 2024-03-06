@@ -1,11 +1,13 @@
-from collections.abc import Mapping
+from typing import List
+
+from model.executors.logger import PaymentLogger
+from model.file_reader import PaymentFileReader
+from model.payment import Payment
 from model.payment_methods.cash import CashPayment
 from model.payment_methods.credit import CreditPayment
 from model.payment_methods.debit import DebitPayment
 from model.payment_methods.pse import PsePayment
 from model.payment_processor import PaymentProcessor
-from model.file_reader import PaymentFileReader
-from model.executors.logger import PaymentLogger
 
 
 def main():
@@ -31,12 +33,13 @@ def create_processor() -> PaymentProcessor:
     return processor
 
 
-def read_file(file_path: str) -> Mapping:
+def read_file(file_path: str) -> List[Payment]:
     file_reader = PaymentFileReader(file_path)
-    return file_reader.read_payments_from_file()
+    payments_data = file_reader.read_payments_from_file()
+    return [Payment(**payment_data) for payment_data in payments_data]
 
 
-def start_process(processor: PaymentProcessor, payments: Mapping) -> None:
+def start_process(processor: PaymentProcessor, payments: List[Payment]) -> None:
     for payment in payments:
         processor.process_payment(payment)
 

@@ -31,17 +31,16 @@ class PaymentProcessor(AbstractPaymentProcessor):
 
     def process_payment(self, payment):
         """Process a payment using the specified payment method"""
-        payment_method = payment["payment_method"]
+
+        payment_method = payment.payment_method
         discount_factory = DiscountPaymentFactory()
 
-        for discount in payment.get("discounts", []):
-            _discount = discount_factory.create_discount(discount, payment)
-            payment = _discount.apply()
+        for discount in payment.discounts:
+            payment = discount_factory.create_discount(discount, payment)
 
         if payment_method in self.payment_strategies:
-            strategy = self.payment_strategies[payment["payment_method"]]
+            strategy = self.payment_strategies[payment_method]
             strategy.process_payment(payment)
 
         else:
             print(f"Error: Payment method '{payment_method}' not found.")
-
