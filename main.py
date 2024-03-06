@@ -1,6 +1,7 @@
 from typing import List
 
-from model.executors.logger import PaymentLogger
+from model.executors.logger import PaymentLogger 
+from model.executors.writter import PaymentWriter
 from model.file_reader import PaymentFileReader
 from model.payment import Payment
 from model.payment_methods.cash import CashPayment
@@ -12,7 +13,7 @@ from model.payment_processor import PaymentProcessor
 
 def main():
     processor = create_processor()
-    payments = read_file("payments.json")
+    payments = read_file("payment_details.json")
     start_process(processor, payments)
 
 
@@ -20,10 +21,22 @@ def create_processor() -> PaymentProcessor:
     processor = PaymentProcessor()
 
     # Payment methods
-    cash = CashPayment().add_observer(PaymentLogger)
-    credit = CreditPayment().add_observer(PaymentLogger)
-    debit = DebitPayment().add_observer(PaymentLogger)
-    pse = PsePayment().add_observer(PaymentLogger)
+    cash = CashPayment()
+    cash.add_observer(PaymentLogger)
+    cash.add_observer(PaymentWriter)
+    
+    credit = CreditPayment()
+    credit.add_observer(PaymentLogger)
+    credit.add_observer(PaymentWriter)
+    
+    
+    debit = DebitPayment()
+    debit.add_observer(PaymentLogger)
+    debit.add_observer(PaymentWriter)
+    
+    pse = PsePayment()
+    pse.add_observer(PaymentLogger)
+    pse.add_observer(PaymentWriter)
 
     processor.add_payment_method("cash", cash)
     processor.add_payment_method("credit", credit)

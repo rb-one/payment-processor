@@ -1,5 +1,6 @@
 [
     {
+        "reference": "71bfc3a6-8a2d-4a23-b4d9-3c286221fe76",
         "payment_method": "cash",
         "amount": 100.0,
         "discounts": [

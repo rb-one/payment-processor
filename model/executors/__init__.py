@@ -7,3 +7,4 @@ class ExecutorObserver(ABC):
         """
         Abstract method for observers to update their state.
         """
+
