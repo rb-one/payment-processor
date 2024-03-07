@@ -1,14 +1,14 @@
 from typing import List
 
-from model.executors.logger import PaymentLogger 
-from model.executors.writter import PaymentWriter
-from model.file_reader import PaymentFileReader
-from model.payment import Payment
-from model.payment_methods.cash import CashPayment
-from model.payment_methods.credit import CreditPayment
-from model.payment_methods.debit import DebitPayment
-from model.payment_methods.pse import PsePayment
-from model.payment_processor import PaymentProcessor
+from application.executors.logger import PaymentLogger
+from application.executors.writter import PaymentWriter
+from application.file_reader import PaymentFileReader
+from domain.payment import Payment
+from domain.payment_methods.cash import CashPayment
+from domain.payment_methods.credit import CreditPayment
+from domain.payment_methods.debit import DebitPayment
+from domain.payment_methods.pse import PsePayment
+from application.payment_processor import PaymentProcessor
 
 
 def main():
@@ -24,16 +24,16 @@ def create_processor() -> PaymentProcessor:
     cash = CashPayment()
     cash.add_observer(PaymentLogger)
     cash.add_observer(PaymentWriter)
-    
+
     credit = CreditPayment()
     credit.add_observer(PaymentLogger)
     credit.add_observer(PaymentWriter)
-    
-    
+
+
     debit = DebitPayment()
     debit.add_observer(PaymentLogger)
     debit.add_observer(PaymentWriter)
-    
+
     pse = PsePayment()
     pse.add_observer(PaymentLogger)
     pse.add_observer(PaymentWriter)

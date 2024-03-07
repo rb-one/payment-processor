@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from model.discounts import DiscountPaymentFactory
+from domain.discounts import DiscountPaymentFactory
 
 
 class AbstractPaymentProcessor(ABC):

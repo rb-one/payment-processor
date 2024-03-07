@@ -6,7 +6,7 @@ logging.basicConfig(
 )
 logger = logging.getLogger(__name__)
 
-from model.executors import ExecutorObserver
+from application.executors import ExecutorObserver
 
 
 class PaymentLogger(ExecutorObserver):

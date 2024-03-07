@@ -1,5 +1,5 @@
 import json
-from model.executors import ExecutorObserver
+from application.executors import ExecutorObserver
 
 
 class SingletonMeta(type):
@@ -36,8 +36,9 @@ class PaymentWriter(ExecutorObserver):
     def update(self, payment):
         """Register payment info"""
         data_store = DataStore("payment_details.json")
-        
+
         for idx, _payment in enumerate(data_store.payments):
             if payment.reference == _payment["reference"]:
                 data_store.payments[idx] = payment.__dict__
+
         data_store.save_payments()

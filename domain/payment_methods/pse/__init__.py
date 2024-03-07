@@ -1,4 +1,4 @@
-from model.payment_methods import ObservablePaymentMethod
+from domain.payment_methods import ObservablePaymentMethod
 
 
 class PsePayment(ObservablePaymentMethod):

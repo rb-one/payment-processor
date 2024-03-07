@@ -1,6 +1,4 @@
-from model.payment_methods import ObservablePaymentMethod
-
-# from model.logger import PaymentLogger
+from domain.payment_methods import ObservablePaymentMethod
 
 
 class CashPayment(ObservablePaymentMethod):
